@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	interface Bookmark {
 		url: string;
@@ -12,6 +13,13 @@
 	let tags = $state('');
 
 	onMount(async () => {
+		const authResult = await chrome.storage.session.get('authenticated');
+		const isAuthenticated = authResult.authenticated === 'true';
+		if (!isAuthenticated) {
+			goto('/pin');
+			return;
+		}
+
 		const result = await chrome.storage.local.get('bookmarks');
 		if (result.bookmarks) {
 			console.log(typeof result.bookmarks);
@@ -48,7 +56,8 @@
 	<form action="">
 		<div>
 			<label for="url">URL:</label>
-			<input id="url" type="text" placeholder="https://example.com" bind:value={url} />
+			<!-- svelte-ignore a11y_autofocus -->
+			<input id="url" type="text" placeholder="https://example.com" bind:value={url} autofocus />
 		</div>
 		<div>
 			<label for="tags">Tags</label>
