@@ -12,7 +12,12 @@
 	let tags = $state('');
 
 	onMount(async () => {
-		console.log('Loaded bookmarks:', links);
+		const result = await chrome.storage.local.get('bookmarks');
+		if (result.bookmarks) {
+			console.log(typeof result.bookmarks);
+
+			links = Array.isArray(result.bookmarks) ? result.bookmarks : Object.values(result.bookmarks);
+		}
 	});
 
 	function addBookmark(url: string, tags: string) {
@@ -27,7 +32,7 @@
 			.filter((tag) => tag !== '');
 		links.push({ url: formattedUrl, tags: tagArray });
 
-		console.log('Updated links:', links); // Log here to see the new bookmark
+		chrome.storage.local.set({ bookmarks: [...links] }).then(() => {});
 	}
 
 	let SearchQuery = $state('');
