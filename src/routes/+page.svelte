@@ -46,14 +46,16 @@
 
 	let SearchQuery = $state('');
 	let filteredLinks = $derived<Bookmark[]>(
-		(links || []).filter((link) => {
-			const query = SearchQuery.toLowerCase();
-			return (
-				link.url.toLowerCase().includes(query) ||
-				link.title?.toLowerCase().includes(query) ||
-				(Array.isArray(link.tags) && link.tags.some((tag) => tag.toLowerCase().includes(query)))
-			);
-		})
+		(links || [])
+			.filter((link) => {
+				const query = SearchQuery.toLowerCase();
+				return (
+					link.url.toLowerCase().includes(query) ||
+					link.title?.toLowerCase().includes(query) ||
+					(Array.isArray(link.tags) && link.tags.some((tag) => tag.toLowerCase().includes(query)))
+				);
+			})
+			.reverse()
 	);
 
 	async function handleBookmarkCurrentTab() {
