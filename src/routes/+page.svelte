@@ -25,8 +25,6 @@
 
 		const result = await chrome.storage.local.get('bookmarks');
 		if (result.bookmarks) {
-			console.log(typeof result.bookmarks);
-
 			links = Array.isArray(result.bookmarks) ? result.bookmarks : Object.values(result.bookmarks);
 		}
 	});
@@ -42,7 +40,6 @@
 			.map((tag) => tag.trim())
 			.filter((tag) => tag !== '');
 		links.push({ url: formattedUrl, tags: tagArray, title, favicon });
-		console.log('CUM');
 
 		chrome.storage.local.set({ bookmarks: [...links] }).then(() => {});
 	}
@@ -61,9 +58,7 @@
 
 	async function handleBookmarkCurrentTab() {
 		// Get the current active tab
-		console.log('CUM');
 		const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-		console.log(tab);
 		if (tab && tab.url && tab.title) {
 			addBookmark(tab.url, tags, tab.title, tab.favIconUrl);
 			tags = '';
