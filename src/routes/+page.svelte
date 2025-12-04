@@ -25,7 +25,14 @@
 
 		const result = await chrome.storage.local.get('bookmarks');
 		if (result.bookmarks) {
-			links = Array.isArray(result.bookmarks) ? result.bookmarks : Object.values(result.bookmarks);
+			const bookmarksArray = Array.isArray(result.bookmarks)
+				? result.bookmarks
+				: Object.values(result.bookmarks);
+			// Ensure tags are always arrays
+			links = bookmarksArray.map((bookmark) => ({
+				...bookmark,
+				tags: Array.isArray(bookmark.tags) ? bookmark.tags : Object.values(bookmark.tags || {})
+			}));
 		}
 	});
 
@@ -41,7 +48,14 @@
 			.filter((tag) => tag !== '');
 		links.push({ url: formattedUrl, tags: tagArray, title, favicon });
 
-		chrome.storage.local.set({ bookmarks: [...links] }).then(() => {});
+		// Ensure we're storing plain objects with proper arrays
+		const bookmarksToStore = links.map((link) => ({
+			url: link.url,
+			title: link.title,
+			tags: Array.from(link.tags || []),
+			favicon: link.favicon
+		}));
+		chrome.storage.local.set({ bookmarks: bookmarksToStore }).then(() => {});
 	}
 
 	let SearchQuery = $state('');
@@ -49,10 +63,12 @@
 		(links || [])
 			.filter((link) => {
 				const query = SearchQuery.toLowerCase();
+				// Ensure tags is an array before searching
+				const tagsArray = Array.isArray(link.tags) ? link.tags : Object.values(link.tags || {});
 				return (
 					link.url.toLowerCase().includes(query) ||
 					link.title?.toLowerCase().includes(query) ||
-					(Array.isArray(link.tags) && link.tags.some((tag) => tag.toLowerCase().includes(query)))
+					tagsArray.some((tag) => String(tag).toLowerCase().includes(query))
 				);
 			})
 			.reverse()
