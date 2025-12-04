@@ -24,79 +24,34 @@
 </script>
 
 <!-- svelte-ignore a11y_autofocus -->
-<div class="pin-container">
-	<h1>Enter PIN</h1>
-	<form onsubmit={handlePinSubmit}>
-		<input
-			type="password"
-			inputmode="numeric"
-			maxlength="4"
-			placeholder="Enter PIN"
-			bind:value={pinInput}
-			oninput={handlePinInput}
-			autocomplete="off"
-			autofocus
-		/>
-		<button type="submit" disabled={pinInput.length !== 4}>Submit</button>
-		{#if pinError}
-			<p class="error">Incorrect PIN. Please try again.</p>
-		{/if}
-	</form>
-</div>
-
-<style>
-	.pin-container {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		min-height: 100vh;
-		padding: 20px;
-	}
-
-	.pin-container h1 {
-		margin-bottom: 20px;
-	}
-
-	.pin-container form {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 15px;
-	}
-
-	.pin-container input[type='password'] {
-		font-size: 24px;
-		letter-spacing: 10px;
-		text-align: center;
-		padding: 10px;
-		width: 200px;
-		border: 2px solid #ccc;
-		border-radius: 5px;
-	}
-
-	.pin-container button {
-		padding: 10px 30px;
-		font-size: 16px;
-		cursor: pointer;
-		border: none;
-		border-radius: 5px;
-		background-color: #007bff;
-		color: white;
-	}
-
-	.pin-container button:disabled {
-		background-color: #ccc;
-		cursor: not-allowed;
-	}
-
-	.pin-container button:not(:disabled):hover {
-		background-color: #0056b3;
-	}
-
-	.error {
-		color: red;
-		font-size: 14px;
-		margin: 0;
-	}
-</style>
+<main class="bg-slate-700 max-w-[500px] mx-auto p-6 flex flex-col justify-center min-h-screen">
+	<div class="flex flex-col items-center">
+		<h1 class="text-3xl font-semibold text-amber-500 mb-8">Enter PIN</h1>
+		<form onsubmit={handlePinSubmit} class="flex flex-col gap-4 w-full">
+			<div class="flex flex-col">
+				<input
+					type="password"
+					inputmode="numeric"
+					maxlength="4"
+					placeholder="••••"
+					bind:value={pinInput}
+					oninput={handlePinInput}
+					autocomplete="off"
+					autofocus
+					class="focus:outline-amber-400 p-4 outline-2 rounded text-slate-300 text-center text-4xl tracking-widest focus:outline-2 transition-all duration-150 bg-slate-600"
+					style="transition-duration: .15s; transition-property: background, border, color, outline; transition-timing-function: ease-out;"
+				/>
+			</div>
+			<button
+				type="submit"
+				disabled={pinInput.length !== 4}
+				class="bg-amber-500 hover:bg-amber-400 disabled:bg-slate-500 disabled:cursor-not-allowed text-slate-900 font-semibold py-3 px-6 rounded transition-colors duration-200 mt-2"
+			>
+				Submit
+			</button>
+			{#if pinError}
+				<p class="text-red-400 text-sm text-center mt-2">Incorrect PIN. Please try again.</p>
+			{/if}
+		</form>
+	</div>
+</main>
