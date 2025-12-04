@@ -67,50 +67,50 @@
 </script>
 
 <main
-	class="bg-slate-700 max-w-[500px] max-h-[600px] mx-auto p-6 flex flex-col justify-center overflow-hidden"
+	class="mx-auto flex max-h-[600px] max-w-[500px] flex-col justify-center overflow-hidden bg-slate-700 p-6"
 >
 	<button
-		class="text-amber-500 cursor-pointer transition-colors duration-200 hover:text-amber-400 self-center"
+		class="cursor-pointer self-center text-amber-500 transition-colors duration-200 hover:text-amber-400"
 		tabindex="0"
 	>
 		<BookmarkPlus class="size-32" onclick={handleBookmarkCurrentTab} />
 	</button>
 
-	<div class="flex flex-col mt-4">
+	<div class="mt-4 flex flex-col">
 		<label for="tags" class="text-slate-300">Tags</label>
 		<input
 			id="tags"
 			placeholder="Comma, seperated, tags"
 			type="text"
 			bind:value={tags}
-			class="focus:outline-amber-400 mt-2 p-2 outline-2 rounded text-slate-300 focus:outline-2 transition-all duration-150 bg-slate-600"
+			class="mt-2 rounded bg-slate-600 p-2 text-slate-300 outline-2 transition-all duration-150 focus:outline-2 focus:outline-amber-400"
 			style="transition-duration: .15s; transition-property: background, border, color, outline; transition-timing-function: ease-out;"
 		/>
 	</div>
 
-	<div class="flex flex-col mt-8">
+	<div class="mt-8 flex flex-col">
 		<label for="search" class="text-slate-300">Search</label>
 		<input
 			id="search"
 			placeholder="Search bookmarks"
 			type="text"
 			bind:value={SearchQuery}
-			class="focus:outline-amber-400 mt-2 p-2 outline-2 rounded text-slate-300 focus:outline-2 transition-all duration-150 bg-slate-600"
+			class="mt-2 rounded bg-slate-600 p-2 text-slate-300 outline-2 transition-all duration-150 focus:outline-2 focus:outline-amber-400"
 			style="transition-duration: .15s; transition-property: background, border, color, outline; transition-timing-function: ease-out;"
 		/>
 	</div>
 
-	<div class="flex flex-col gap-2 mt-4 overflow-y-scroll max-h-80">
+	<div class="mt-4 flex max-h-80 flex-col gap-2 overflow-y-scroll">
 		{#each filteredLinks as link}
 			<a href={link.url} rel="external" target="_blank">
 				<div
-					class="hover:bg-slate-500 flex items-center justify-between bg-slate-600 rounded p-2 text-slate-300 transition-colors duration-200 max-h-10 wrap"
+					class="wrap flex max-h-10 items-center justify-between rounded bg-slate-600 p-2 text-slate-300 transition-colors duration-200 hover:bg-slate-500"
 				>
-					<div class="flex items-center gap-2 flex-1 min-w-0">
+					<div class="flex min-w-0 flex-1 items-center gap-2">
 						{#if link.favicon}
-							<img src={link.favicon} alt="favicon" class="w-4 h-4 shrink-0" />
+							<img src={link.favicon} alt="favicon" class="h-4 w-4 shrink-0" />
 						{/if}
-						<span class="truncate max-w-32">
+						<span class="max-w-32 truncate">
 							{link.url}
 						</span>
 						<span class="truncate">
@@ -119,7 +119,7 @@
 							{/if}
 						</span>
 					</div>
-					<ExternalLink class="shrink-0 ml-2" />
+					<ExternalLink class="ml-2 shrink-0" />
 				</div>
 			</a>
 		{/each}
