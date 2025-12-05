@@ -3,9 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { BookmarkPlus, ExternalLink } from '@lucide/svelte';
 	import { api } from '../convex/_generated/api.js';
-	import { useQuery } from 'convex-svelte';
-
-	const links = useQuery(api.links.get, {});
+	import { useQuery, useConvexClient } from 'convex-svelte';
 
 	interface Bookmark {
 		title: string;
@@ -14,9 +12,9 @@
 		favicon?: string;
 	}
 
-	let links = $state<Bookmark[]>([]);
+	const client = useConvexClient();
+	const links = useQuery(api.links.get, {});
 
-	let url = $state('');
 	let tags = $state('');
 
 	onMount(async () => {
@@ -26,21 +24,8 @@
 			goto('/pin');
 			return;
 		}
-
-		const result = await chrome.storage.local.get('bookmarks');
-		if (result.bookmarks) {
-			const bookmarksArray = Array.isArray(result.bookmarks)
-				? result.bookmarks
-				: Object.values(result.bookmarks);
-			// Ensure tags are always arrays
-			links = bookmarksArray.map((bookmark) => ({
-				...bookmark,
-				tags: Array.isArray(bookmark.tags) ? bookmark.tags : Object.values(bookmark.tags || {})
-			}));
-		}
 	});
-
-	function addBookmark(url: string, tags: string, title: string = '', favicon?: string) {
+	async function addBookmark(url: string, tags: string, title: string = '', favicon?: string) {
 		let formattedUrl = url;
 		if (!/^https?:\/\//i.test(url)) {
 			formattedUrl = `https://${url}`;
@@ -50,21 +35,18 @@
 			.split(',')
 			.map((tag) => tag.trim())
 			.filter((tag) => tag !== '');
-		links.push({ url: formattedUrl, tags: tagArray, title, favicon });
 
-		// Ensure we're storing plain objects with proper arrays
-		const bookmarksToStore = links.map((link) => ({
-			url: link.url,
-			title: link.title,
-			tags: Array.from(link.tags || []),
-			favicon: link.favicon
-		}));
-		chrome.storage.local.set({ bookmarks: bookmarksToStore }).then(() => {});
+		await client.mutation(api.links.create, {
+			url: formattedUrl,
+			title: title,
+			tags: tagArray,
+			favicon: favicon
+		});
 	}
 
 	let SearchQuery = $state('');
 	let filteredLinks = $derived<Bookmark[]>(
-		(links || [])
+		(links.data || [])
 			.filter((link) => {
 				const query = SearchQuery.toLowerCase();
 				// Ensure tags is an array before searching
