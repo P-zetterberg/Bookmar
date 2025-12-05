@@ -40,6 +40,8 @@
 	"dependencies": {
 		"@lucide/svelte": "^0.555.0",
 		"@types/chrome": "^0.1.29",
+		"convex": "^1.30.0",
+		"convex-svelte": "^0.0.12",
 		"sveltekit-adapter-chrome-extension": "^2.0.1"
 	}
 }

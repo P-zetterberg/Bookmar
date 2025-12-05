@@ -2,6 +2,10 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { BookmarkPlus, ExternalLink } from '@lucide/svelte';
+	import { api } from '../convex/_generated/api.js';
+	import { useQuery } from 'convex-svelte';
+
+	const links = useQuery(api.links.get, {});
 
 	interface Bookmark {
 		title: string;

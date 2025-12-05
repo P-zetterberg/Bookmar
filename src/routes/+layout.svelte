@@ -2,8 +2,10 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import '$lib/popup.css';
+	import { setupConvex } from 'convex-svelte';
 
-	let { children } = $props();
+	const { children } = $props();
+	setupConvex('https://coordinated-meadowlark-491.convex.cloud');
 </script>
 
 <svelte:head>
