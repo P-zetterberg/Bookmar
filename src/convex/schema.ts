@@ -7,5 +7,9 @@ export default defineSchema({
 		tags: v.array(v.string()),
 		title: v.string(),
 		url: v.string()
+	}),
+	models: defineTable({
+		name: v.string(),
+		url: v.string()
 	})
 });
