@@ -105,27 +105,41 @@
 	</div>
 
 	<div class="mt-4 flex max-h-80 flex-col gap-2 overflow-y-scroll">
-		{#each filteredLinks as link}
-			<a href={link.url} rel="external" target="_blank">
+		{#if links.isLoading}
+			{#each Array(5) as _, i}
 				<div
-					class="wrap flex max-h-10 items-center justify-between rounded bg-slate-600 p-2 text-slate-300 transition-colors duration-200 hover:bg-slate-500"
+					class="flex max-h-10 animate-pulse items-center justify-between rounded bg-slate-600 p-2"
 				>
 					<div class="flex min-w-0 flex-1 items-center gap-2">
-						{#if link.favicon}
-							<img src={link.favicon} alt="favicon" class="h-4 w-4 shrink-0" />
-						{/if}
-						<span class="max-w-32 truncate">
-							{link.url}
-						</span>
-						<span class="truncate">
-							{#if link.title}
-								- {link.title}
-							{/if}
-						</span>
+						<div class="h-4 w-4 shrink-0 rounded bg-slate-500"></div>
+						<div class="h-4 w-100 rounded bg-slate-500"></div>
 					</div>
-					<ExternalLink class="ml-2 shrink-0" />
+					<div class="ml-2 h-4 w-4 shrink-0 rounded bg-slate-500"></div>
 				</div>
-			</a>
-		{/each}
+			{/each}
+		{:else}
+			{#each filteredLinks as link}
+				<a href={link.url} rel="external" target="_blank">
+					<div
+						class="wrap flex max-h-10 items-center justify-between rounded bg-slate-600 p-2 text-slate-300 transition-colors duration-200 hover:bg-slate-500"
+					>
+						<div class="flex min-w-0 flex-1 items-center gap-2">
+							{#if link.favicon}
+								<img src={link.favicon} alt="favicon" class="h-4 w-4 shrink-0" />
+							{/if}
+							<span class="max-w-32 truncate">
+								{link.url}
+							</span>
+							<span class="truncate">
+								{#if link.title}
+									- {link.title}
+								{/if}
+							</span>
+						</div>
+						<ExternalLink class="ml-2 shrink-0" />
+					</div>
+				</a>
+			{/each}
+		{/if}
 	</div>
 </main>
