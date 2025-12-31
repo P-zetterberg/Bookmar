@@ -127,6 +127,11 @@
 			})
 			.reverse()
 	);
+
+	function openLink(url: string, event: MouseEvent) {
+		event.preventDefault();
+		chrome.tabs.create({ url, active: false });
+	}
 </script>
 
 <main
@@ -203,7 +208,7 @@
 				{/each}
 			{:else}
 				{#each filteredLinks as link}
-					<a href={link.url} rel="external" target="_blank">
+					<a href={link.url} rel="external" target="_blank" onclick={(e) => openLink(link.url, e)}>
 						<div
 							class="wrap flex max-h-10 items-center justify-between rounded bg-slate-600 p-2 text-slate-300 transition-colors duration-200 hover:bg-slate-500"
 						>
@@ -262,7 +267,12 @@
 				{/each}
 			{:else}
 				{#each filteredModels as model}
-					<a href={model.url} rel="external" target="_blank">
+					<a
+						href={model.url}
+						rel="external"
+						target="_blank"
+						onclick={(e) => openLink(model.url, e)}
+					>
 						<div
 							class="wrap flex max-h-10 items-center justify-between rounded bg-slate-600 p-2 text-slate-300 transition-colors duration-200 hover:bg-slate-500"
 						>
